@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Talent · Lliving Artifacts</title>
+<style>
+:root {
+  --black:  #05100e; --b2: #081a16; --b3: #0c2220; --b4: #112a27;
+  --white:  #e8faf5; --cream: #7eecd4; --gold: #00c9a0; --gold2: #2de8be;
+  --muted:  #4a7a6e; --rule: rgba(0,201,160,0.09); --rule2: rgba(0,201,160,0.18);
+  --serif:  'Cormorant Garamond', Georgia, serif;
+  --sans:   'Outfit', system-ui, sans-serif;
+  --mono:   'Space Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--black); color:var(--white); font-family:var(--sans); font-weight:300; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.025'/%3E%3C/svg%3E"); opacity:.55; mix-blend-mode:overlay; }
+.hidden { display:none !important; }
+#gate { position:fixed; inset:0; z-index:300; background:var(--black); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; text-align:center; }
+.gate-logo { margin-bottom:56px; } .gate-logo img { height:56px; width:auto; display:block; margin:0 auto; }
+.gate-vline { width:1px; height:72px; background:linear-gradient(to bottom,transparent,var(--rule2),transparent); margin:0 auto 52px; }
+.nfc-wrap { position:relative; width:96px; height:96px; margin:0 auto 52px; }
+.nfc-ring { position:absolute; border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); border:1px solid rgba(0,201,160,.5); animation:ring-out 2.6s ease-out infinite; }
+.nfc-ring:nth-child(1){width:30px;height:30px;animation-delay:0s} .nfc-ring:nth-child(2){width:62px;height:62px;animation-delay:.65s} .nfc-ring:nth-child(3){width:96px;height:96px;animation-delay:1.3s}
+@keyframes ring-out{0%{transform:translate(-50%,-50%) scale(.1);opacity:.9}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.nfc-core { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:18px; height:18px; border-radius:50%; border:1.5px solid var(--gold); background:rgba(0,201,160,.08); }
+.nfc-core::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:7px; height:7px; border-radius:50%; background:var(--gold); animation:core-pulse 1.8s ease-in-out infinite; }
+@keyframes core-pulse{0%,100%{opacity:1}50%{opacity:.15}}
+.gate-h { font-family:var(--serif); font-size:clamp(2.8rem,8vw,5.5rem); font-weight:700; line-height:1; letter-spacing:-1px; color:var(--white); margin-bottom:8px; } .gate-h em { font-style:italic; color:var(--gold2); }
+.gate-caps { font-family:var(--sans); font-size:.65rem; font-weight:500; letter-spacing:7px; text-transform:uppercase; color:var(--muted); margin-bottom:36px; }
+.gate-body { font-size:.88rem; color:var(--muted); line-height:1.85; max-width:380px; margin:0 auto 44px; } .gate-body strong { color:var(--cream); font-weight:500; }
+.gate-lock { display:inline-flex; align-items:center; gap:12px; border:1px solid rgba(245,240,232,.09); padding:13px 30px; font-family:var(--sans); font-size:.62rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--muted); } .gate-lock svg { opacity:.4; flex-shrink:0; }
+#invalid-screen { position:fixed; inset:0; z-index:300; background:var(--black); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px; text-align:center; }
+.inv-pill { font-family:var(--sans); font-size:.6rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:#9b4040; border:1px solid rgba(155,64,64,.3); padding:8px 22px; margin-bottom:36px; animation:shake .45s ease .2s both; }
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.inv-h { font-family:var(--serif); font-size:clamp(3rem,9vw,6rem); font-weight:700; line-height:.95; letter-spacing:-1px; color:var(--white); margin-bottom:28px; } .inv-h em { font-style:italic; color:#c05050; }
+.inv-body { font-size:.9rem; color:var(--muted); line-height:1.85; max-width:400px; margin-bottom:36px; } .inv-body strong { color:var(--cream); font-weight:500; }
+.inv-note { font-family:var(--sans); font-size:.62rem; letter-spacing:3px; text-transform:uppercase; color:rgba(155,64,64,.65); }
+nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:18px 52px; background:rgba(8,8,8,.93); backdrop-filter:blur(24px); border-bottom:1px solid var(--rule); }
+.nav-logo img { height:26px; width:auto; display:block; } .nav-links { list-style:none; display:flex; gap:36px; }
+.nav-links a { font-family:var(--sans); font-size:.6rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .2s; } .nav-links a:hover { color:var(--cream); }
+.nav-pill { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--gold); border:1px solid rgba(0,201,160,.3); padding:6px 16px; }
+#artifact { padding-top:68px; }
+.hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; overflow:hidden; }
+.hero-left { display:flex; flex-direction:column; justify-content:center; padding:100px 68px 80px; border-right:1px solid var(--rule); }
+.hero-issue { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:5px; text-transform:uppercase; color:var(--muted); margin-bottom:52px; display:flex; align-items:center; gap:16px; } .hero-issue::before { content:''; width:40px; height:1px; background:var(--muted); opacity:.5; } .hero-issue .accent { color:var(--gold); }
+.hero-title { font-family:var(--serif); font-size:clamp(3.5rem,6.5vw,7rem); font-weight:700; line-height:.9; letter-spacing:-2px; margin-bottom:14px; } .hero-title em { font-style:italic; color:var(--gold2); display:block; }
+.hero-sub { font-family:var(--sans); font-size:.62rem; font-weight:500; letter-spacing:9px; text-transform:uppercase; color:var(--muted); margin-bottom:52px; }
+.verified-bar { display:flex; align-items:center; gap:16px; padding:16px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin-bottom:44px; }
+.v-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); animation:blink 2s ease-in-out infinite; } @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.v-label { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--gold); } .v-uid { margin-left:auto; font-family:var(--mono); font-size:.55rem; color:var(--muted); letter-spacing:1px; }
+.hero-desc { font-size:.9rem; color:var(--muted); line-height:1.9; max-width:400px; margin-bottom:36px; } .hero-desc strong { color:var(--cream); font-weight:500; }
+.tags { display:flex; flex-wrap:wrap; gap:8px; } .tag { font-family:var(--sans); font-size:.56rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--muted); border:1px solid var(--rule2); padding:6px 14px; } .tag.gold { color:var(--gold); border-color:rgba(0,201,160,.3); }
+.hero-right { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:100px 68px 80px; background:var(--b2); }
+.card-3d { perspective:1400px; width:100%; max-width:480px; cursor:pointer; user-select:none; will-change:transform,filter; } .card-3d.flipped { max-width:480px; }
+.card-inner { position:relative; padding-bottom:63%; transform-style:preserve-3d; animation:card-tilt-y 9s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate,card-tilt-x 13s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate,card-lift 7s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate; will-change:transform; } .card-3d.flipped .card-inner { padding-bottom:63%; } .card-3d:hover .card-inner { animation-play-state:paused; }
+@keyframes card-tilt-y { 0%{transform:rotateY(-6deg)} 100%{transform:rotateY(6deg)} }
+@keyframes card-tilt-x { 0%{transform:rotateX(3.5deg)} 100%{transform:rotateX(-3.5deg)} }
+@keyframes card-lift { 0%{transform:translateY(0) scale(1)} 100%{transform:translateY(-8px) scale(1.012)} }
+.card-inner::before { content:''; position:absolute; inset:0; background:linear-gradient(105deg,transparent 30%,rgba(0,201,160,.22) 50%,transparent 70%); transform:translateX(-120%); z-index:20; pointer-events:none; border-radius:10px; backface-visibility:hidden; transition:transform 0s; } .card-inner.sheen::before { transform:translateX(120%); transition:transform .75s ease; }
+.card-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:10px; overflow:hidden; }
+.card-front { background:#041210; border:1px solid rgba(245,240,232,.07); box-shadow:0 70px 140px rgba(0,0,0,.85),0 0 0 1px rgba(0,201,160,.1),inset 0 1px 0 rgba(255,255,255,.04); overflow:hidden; }
+.card-photo { flex:1; background:var(--b4); overflow:hidden; position:relative; min-height:60%; } .card-photo img { width:100%; height:100%; object-fit:cover; opacity:.88; display:block; }
+.card-photo-empty { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:linear-gradient(145deg,#1a1210,#0d0808); } .card-photo-empty span:first-child{font-size:3rem;opacity:.12} .card-photo-empty span:last-child{font-family:var(--serif);font-size:1rem;font-weight:700;color:rgba(245,240,232,.12);letter-spacing:3px}
+.card-bottom { padding:16px 20px; background:var(--b3); border-top:1px solid rgba(245,240,232,.06); display:flex; align-items:center; justify-content:space-between; gap:12px; } .card-bottom-logo img{height:18px;width:auto;display:block;opacity:.45} .card-edition{font-family:var(--sans);font-size:.48rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);text-align:right;line-height:1.6}
+.card-chip{width:28px;height:20px;background:linear-gradient(135deg,#00c9a0,#2de8be,#00a882);border-radius:4px;box-shadow:0 2px 8px rgba(0,201,160,.3);position:relative;flex-shrink:0} .card-chip::before{content:'';position:absolute;inset:4px;border:.5px solid rgba(0,0,0,.35);border-radius:2px}
+.card-serial{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:.48rem;color:rgba(245,240,232,.18);letter-spacing:1px}
+.card-back { background:#041210; border:1px solid rgba(245,240,232,.07); box-shadow:0 70px 140px rgba(0,0,0,.85),0 0 0 1px rgba(0,201,160,.1); transform:rotateY(180deg); overflow:hidden; }
+.back-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:1; z-index:0; display:block; }
+.back-uid-stamp{position:absolute;bottom:8px;right:10px;z-index:3;font-family:var(--mono);font-size:.38rem;letter-spacing:1.5px;color:rgba(255,255,255,.28);background:rgba(0,0,0,.35);padding:3px 7px;border-radius:3px;backdrop-filter:blur(4px)}
+.back-tap-stamp{position:absolute;bottom:8px;left:10px;z-index:3;font-family:var(--mono);font-size:.38rem;letter-spacing:1.5px;color:rgba(255,255,255,.28);background:rgba(0,0,0,.35);padding:3px 7px;border-radius:3px;backdrop-filter:blur(4px)}
+.card-hint{margin-top:18px;font-family:var(--sans);font-size:.56rem;letter-spacing:3px;text-transform:uppercase;color:rgba(245,240,232,.13);text-align:center}
+.edition-sep{display:flex;align-items:center;gap:14px;margin-top:30px;width:100%;max-width:480px} .es-line{flex:1;height:1px;background:var(--rule)} .es-text{font-family:var(--sans);font-size:.56rem;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.data-strip { border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); display:grid; grid-template-columns:repeat(4,1fr); } .ds-item { padding:36px 44px; border-right:1px solid var(--rule); } .ds-item:last-child { border-right:none; } .ds-num { font-family:var(--serif); font-size:3rem; font-weight:700; font-style:italic; line-height:1; margin-bottom:8px; } .ds-num span { color:var(--gold2); } .ds-label { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+.s-eye { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:16px; } .s-eye::before { content:''; width:36px; height:1px; background:var(--gold); opacity:.6; }
+.s-title { font-family:var(--serif); font-size:clamp(2.8rem,5vw,5.5rem); font-weight:700; line-height:.95; letter-spacing:-1px; color:var(--white); margin-bottom:16px; } .s-title em { font-style:italic; color:var(--gold2); }
+.auth-wrap { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--rule); } .auth-left { padding:88px 68px; border-right:1px solid var(--rule); display:flex; flex-direction:column; justify-content:center; } .auth-body { font-size:.88rem; color:var(--muted); line-height:1.9; max-width:400px; margin-top:22px; } .auth-body strong { color:var(--cream); font-weight:500; }
+.auth-right { padding:88px 68px; background:var(--b2); display:flex; flex-direction:column; justify-content:center; } .rec-row { display:flex; justify-content:space-between; align-items:baseline; padding:15px 0; border-bottom:1px solid var(--rule); font-size:.82rem; } .rec-row:first-child { border-top:1px solid var(--rule); } .rk { color:var(--muted); font-weight:400; } .rv { color:var(--white); font-weight:500; text-align:right; } .rv.mono { font-family:var(--mono); font-size:.68rem; color:var(--cream); } .rv.gold { color:var(--gold2); } .rv.ok { color:#7ecf8f; } .rv.bad { color:#bf5555; }
+.cert-box { margin-top:40px; border:1px solid rgba(0,201,160,.18); padding:32px; position:relative; } .cert-box::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); } .cert-title { font-family:var(--serif); font-size:1.8rem; font-weight:700; font-style:italic; color:var(--gold2); margin-bottom:12px; } .cert-body { font-size:.8rem; color:var(--muted); line-height:1.75; }
+.bts-wrap { border-top:1px solid var(--rule); background:var(--black); } .bts-header { padding:88px 68px 0; max-width:700px; } .bts-intro { font-size:.88rem; color:var(--muted); line-height:1.9; max-width:520px; margin-top:18px; }
+.found-wrap { border-top:1px solid var(--rule); background:linear-gradient(160deg,var(--b2) 0%,var(--black) 100%); padding:0 68px; display:flex; align-items:center; justify-content:center; }
+.found-inner { max-width:680px; width:100%; text-align:center; padding:96px 0; }
+.found-badge { display:inline-flex; align-items:center; gap:10px; border:1px solid rgba(0,201,160,.28); padding:8px 20px; margin-bottom:40px; }
+.found-badge-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); animation:blink 2s ease-in-out infinite; flex-shrink:0; }
+.found-badge-text { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--gold); }
+.found-icon { font-size:2.6rem; margin-bottom:24px; line-height:1; }
+.found-title { font-family:var(--serif); font-size:clamp(2.6rem,5.5vw,5rem); font-weight:700; line-height:.95; letter-spacing:-1px; color:var(--white); margin-bottom:28px; } .found-title em { font-style:italic; color:var(--gold2); }
+.found-body { font-size:.9rem; color:var(--muted); line-height:1.9; } .found-body strong { color:var(--cream); font-weight:500; }
+.found-divider { width:56px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:40px auto; }
+.found-cta-text { font-size:.9rem; color:var(--muted); line-height:1.9; margin-bottom:32px; } .found-cta-text strong { color:var(--cream); font-weight:500; }
+.found-tags { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:36px; } .found-tag { font-family:var(--mono); font-size:.62rem; letter-spacing:1px; color:var(--gold); border:1px solid rgba(0,201,160,.28); padding:7px 16px; border-radius:2px; }
+.found-seat-row { display:inline-flex; align-items:center; gap:12px; border:1px solid rgba(245,240,232,.07); padding:14px 28px; color:var(--muted); font-family:var(--sans); font-size:.62rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; } .found-seat-icon { font-size:1rem; }
+@media(max-width:860px){ .found-wrap{ padding:0 36px; } .found-inner{ padding:72px 0; } }
+@media(max-width:540px){ .found-wrap{ padding:0 24px; } .found-inner{ padding:56px 0; } }
+.gallery-wrap { border-top:1px solid var(--rule); background:var(--black); } .gallery-header { padding:88px 68px 0; }
+.nf-row-outer { position:relative; margin-top:48px; padding-bottom:80px; }
+.nf-edge { position:absolute; top:0; bottom:80px; width:96px; z-index:20; display:flex; align-items:center; justify-content:center; } .nf-edge.left { left:0; background:linear-gradient(to right,var(--black) 30%,transparent); } .nf-edge.right { right:0; background:linear-gradient(to left,var(--black) 30%,transparent); }
+.nf-arrow { width:42px; height:42px; border-radius:50%; border:1px solid rgba(0,201,160,.35); background:rgba(8,8,8,.85); backdrop-filter:blur(8px); color:var(--gold); font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; transition:background .2s,border-color .2s,transform .15s; flex-shrink:0; } .nf-arrow:hover { background:rgba(0,201,160,.18); border-color:var(--gold); transform:scale(1.08); } .nf-arrow:active { transform:scale(.96); }
+.nf-row { display:flex; gap:10px; padding:30px 96px 30px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; } .nf-row::-webkit-scrollbar { display:none; }
+.nf-card { position:relative; flex-shrink:0; width:320px; aspect-ratio:16/9; border-radius:4px; overflow:visible; cursor:pointer; transition:transform .28s cubic-bezier(.2,0,.1,1),z-index 0s .28s; z-index:1; } .nf-card:hover { transform:scale(1.12); z-index:30; transition:transform .28s cubic-bezier(.2,0,.1,1),z-index 0s; }
+.nf-card-inner { position:absolute; inset:0; border-radius:4px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.5); transition:box-shadow .28s; } .nf-card:hover .nf-card-inner { box-shadow:0 16px 48px rgba(0,0,0,.85),0 0 0 1px rgba(0,201,160,.28); }
+.nf-card-inner img, .nf-card-inner video { width:100%; height:100%; object-fit:cover; display:block; opacity:.65; transition:opacity .28s; } .nf-card:hover .nf-card-inner img, .nf-card:hover .nf-card-inner video { opacity:1; }
+.nf-overlay { position:absolute; inset:0; border-radius:4px; background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.4) 42%,transparent 72%); opacity:0; transition:opacity .28s; display:flex; flex-direction:column; justify-content:flex-end; padding:14px 14px 12px; pointer-events:none; z-index:4; } .nf-card:hover .nf-overlay { opacity:1; } .nf-card.nf-video .nf-overlay { opacity:1; }
+.nf-bar { position:absolute; bottom:0; left:0; right:0; padding:0 10px 8px; background:linear-gradient(to top,rgba(0,0,0,.72),transparent); border-radius:0 0 4px 4px; pointer-events:none; z-index:3; } .nf-bar-title { font-family:var(--sans); font-size:.48rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:rgba(245,240,232,.5); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nf-headline { font-family:var(--sans); font-size:.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--white); line-height:1.35; margin-bottom:5px; } .nf-credit { font-family:var(--mono); font-size:.45rem; letter-spacing:1.5px; color:var(--gold); opacity:.9; }
+a.nf-card { text-decoration:none; display:block; } a.nf-card::after { content:'↗'; position:absolute; top:8px; right:10px; font-size:.7rem; color:var(--gold); opacity:0; transition:opacity .2s; z-index:7; pointer-events:none; } a.nf-card:hover::after { opacity:1; }
+.nf-yt-badge { position:absolute; top:8px; left:10px; z-index:8; font-family:var(--sans); font-size:.44rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--white); background:rgba(0,201,160,.85); padding:3px 8px; border-radius:2px; pointer-events:none; } .nf-card.nf-yt { cursor:default; } .nf-card.nf-yt:hover { transform:scale(1.06); }
+.nf-vol { position:absolute; top:8px; right:10px; z-index:8; width:30px; height:30px; border-radius:50%; border:1px solid rgba(245,240,232,.3); background:rgba(0,0,0,.6); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity .22s,background .2s,border-color .2s; color:var(--white); } .nf-card:hover .nf-vol { opacity:1; } .nf-vol:hover { background:rgba(0,201,160,.25); border-color:var(--gold); } .nf-vol svg { pointer-events:none; }
+.tech-wrap { border-top:1px solid var(--rule); display:grid; grid-template-columns:1fr 1fr; } .tech-left { padding:88px 68px; border-right:1px solid var(--rule); display:flex; flex-direction:column; justify-content:center; } .tech-feats { display:flex; flex-direction:column; gap:36px; margin-top:44px; } .tech-feat { padding-left:24px; border-left:1px solid rgba(0,201,160,.35); } .tech-feat h4 { font-family:var(--sans); font-size:.65rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--cream); margin-bottom:10px; } .tech-feat p { font-size:.84rem; color:var(--muted); line-height:1.75; } .tech-feat p strong { color:var(--cream); font-weight:500; }
+.tech-right { padding:88px 68px; background:var(--b2); display:flex; flex-direction:column; justify-content:center; } .tech-glyph { font-family:var(--serif); font-size:5rem; font-weight:300; font-style:italic; color:rgba(184,146,42,.14); text-align:center; margin-bottom:44px; } .spec-item { display:flex; justify-content:space-between; align-items:baseline; padding:13px 0; border-bottom:1px solid var(--rule); font-size:.82rem; } .spec-item:first-child { border-top:1px solid var(--rule); } .sk { color:var(--muted); } .sv { font-family:var(--mono); font-size:.7rem; color:var(--cream); text-align:right; }
+footer { border-top:1px solid var(--rule); display:grid; grid-template-columns:1fr 1fr 1fr; } .f-col { padding:52px 68px; border-right:1px solid var(--rule); } .f-col:last-child { border-right:none; } .f-logo img { height:26px; width:auto; opacity:.32; display:block; margin-bottom:20px; } .f-copy { font-size:.74rem; color:var(--muted); line-height:1.9; } .f-eye { font-family:var(--sans); font-size:.56rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; } .f-stat { font-family:var(--serif); font-size:2.2rem; font-weight:700; font-style:italic; color:var(--gold2); margin-bottom:12px; } .f-note { font-size:.76rem; color:var(--muted); line-height:1.8; } .f-uid { font-family:var(--mono); font-size:.56rem; letter-spacing:2px; color:rgba(0,201,160,.3); margin-top:16px; }
+.fade-up { opacity:0; transform:translateY(22px); transition:opacity .8s ease,transform .8s ease; } .fade-up.visible { opacity:1; transform:none; }
+.tp-section { border-top:1px solid var(--rule); background:var(--black); padding:88px 68px 100px; } .tp-header { max-width:700px; margin-bottom:64px; }
+.tp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.tp-card { position:relative; border-radius:6px; overflow:hidden; cursor:pointer; border:1px solid var(--rule2); background:var(--b2); transition:border-color .25s,transform .25s,box-shadow .25s; } .tp-card:hover { border-color:rgba(0,201,160,.45); transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,.7),0 0 0 1px rgba(0,201,160,.2); }
+.tp-card-img { width:100%; aspect-ratio:4/3; overflow:hidden; background:var(--b3); position:relative; } .tp-card-img img { width:100%; height:100%; object-fit:cover; display:block; opacity:.82; transition:opacity .25s,transform .35s; } .tp-card:hover .tp-card-img img { opacity:1; transform:scale(1.04); }
+.tp-card-img-empty { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; font-family:var(--serif); color:rgba(0,201,160,.12); font-size:2.4rem; font-weight:700; font-style:italic; letter-spacing:2px; }
+.tp-card-body { padding:16px 18px 18px; } .tp-card-name { font-family:var(--serif); font-size:1.25rem; font-weight:700; font-style:italic; color:var(--white); line-height:1.1; margin-bottom:4px; } .tp-card-role { font-family:var(--sans); font-size:.52rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:var(--gold); }
+.tp-expand-hint { display:flex; align-items:center; gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid var(--rule); font-family:var(--sans); font-size:.5rem; letter-spacing:3px; text-transform:uppercase; color:var(--muted); transition:color .2s; } .tp-card:hover .tp-expand-hint { color:var(--gold); } .tp-expand-hint::before { content:'+'; width:16px; height:16px; border-radius:50%; border:1px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:.7rem; flex-shrink:0; }
+.tp-modal-bg { position:fixed; inset:0; z-index:400; background:rgba(5,16,14,.88); backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .3s ease; } .tp-modal-bg.active { opacity:1; pointer-events:all; }
+.tp-modal { position:relative; width:100%; max-width:760px; background:var(--b2); border:1px solid var(--rule2); border-radius:10px; overflow:hidden; box-shadow:0 60px 120px rgba(0,0,0,.9),0 0 0 1px rgba(0,201,160,.15); transform:translateY(22px) scale(.97); transition:transform .35s cubic-bezier(.2,0,.1,1); max-height:90vh; overflow-y:auto; } .tp-modal-bg.active .tp-modal { transform:none; }
+.tp-modal-img { width:100%; aspect-ratio:16/9; background:var(--b3); overflow:hidden; position:relative; } .tp-modal-img img { width:100%; height:100%; object-fit:cover; display:block; } .tp-modal-img-empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:3rem; font-weight:700; font-style:italic; color:rgba(0,201,160,.12); letter-spacing:4px; }
+.tp-modal-content { padding:36px 44px 44px; } .tp-modal-eyebrow { font-family:var(--sans); font-size:.56rem; font-weight:500; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:10px; } .tp-modal-name { font-family:var(--serif); font-size:clamp(2rem,4vw,3.2rem); font-weight:700; line-height:.95; letter-spacing:-1px; color:var(--white); margin-bottom:6px; } .tp-modal-name em { font-style:italic; color:var(--gold2); } .tp-modal-role { font-family:var(--sans); font-size:.58rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:28px; padding-bottom:24px; border-bottom:1px solid var(--rule); }
+.tp-modal-bio { font-size:.9rem; color:var(--muted); line-height:1.95; } .tp-modal-bio p+p { margin-top:16px; } .tp-modal-bio strong { color:var(--cream); font-weight:500; }
+.tp-modal-close { position:absolute; top:16px; right:18px; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,240,232,.18); background:rgba(5,16,14,.7); backdrop-filter:blur(8px); color:var(--white); font-size:1.1rem; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .2s,background .2s; z-index:5; } .tp-modal-close:hover { border-color:var(--gold); background:rgba(0,201,160,.15); }
+@media(max-width:1100px){ .tp-section{ padding:68px 36px 80px; } .tp-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:680px){ .tp-section{ padding:52px 24px 64px; } .tp-grid{ grid-template-columns:1fr 1fr; gap:12px; } .tp-modal-content{ padding:24px 24px 32px; } }
+.tp-modal { scrollbar-width:thin; scrollbar-color:var(--rule2) transparent; } .tp-modal::-webkit-scrollbar { width:4px; } .tp-modal::-webkit-scrollbar-thumb { background:var(--rule2); border-radius:2px; }
+@media(max-width:1100px){ nav{padding:16px 28px} .hero{grid-template-columns:1fr} .hero-left{padding:88px 36px 48px;border-right:none;border-bottom:1px solid var(--rule)} .hero-right{padding:52px 36px 80px} .data-strip{grid-template-columns:1fr 1fr} .ds-item:nth-child(2){border-right:none} .ds-item:nth-child(3){border-top:1px solid var(--rule)} .auth-wrap{grid-template-columns:1fr} .auth-left{padding:68px 36px 44px;border-right:none;border-bottom:1px solid var(--rule)} .auth-right{padding:44px 36px 68px} .bts-header{padding:68px 36px 0} .gallery-header{padding:68px 36px 0} .tech-wrap{grid-template-columns:1fr} .tech-left{padding:68px 36px 44px;border-right:none;border-bottom:1px solid var(--rule)} .tech-right{padding:44px 36px 68px} footer{grid-template-columns:1fr} .f-col{padding:44px 36px;border-right:none;border-bottom:1px solid var(--rule)} .f-col:last-child{border-bottom:none} }
+@media(max-width:680px){ nav{padding:14px 20px}.nav-links{display:none} .hero-left{padding:80px 24px 40px}.hero-right{padding:44px 24px 64px} .card-3d{max-width:240px} .card-3d.flipped{max-width:380px} .tech-left,.tech-right{padding:52px 24px} footer .f-col{padding:36px 24px} }
+</style>
+</head>
+<body>
+
+<script>
+window.CARD_IMAGES = {
+  logo:           'Lliving_Artifacts_Logo.png',
+  logoAlt:        'Lliving_Artifacts_Logo.png',
+  cardFront:      'talent5-front.jpg',
+  cardBack:       'talent5-back.jpg',
+  btsMain:        'images/bts-main-thumb.jpg',
+  bts2:           'images/bts-2.jpg',
+  bts3:           'images/bts-3.jpg',
+  bts4:           'images/bts-4-thumb.jpg',
+  bts5:           'images/bts-5-thumb.jpg',
+  bts6:           'images/bts-6.jpg',
+  fncsPlaceholder: 'FNCS_Placeholder_Website.png',
+};
+</script>
+
+<!-- ══ GATE ══ -->
+<div id="gate">
+  <div class="gate-logo"><img data-img="logo" src="" alt="Llama Hunter · Lliving Artifacts"></div>
+  <div class="gate-vline"></div>
+  <div class="nfc-wrap"><div class="nfc-ring"></div><div class="nfc-ring"></div><div class="nfc-ring"></div><div class="nfc-core"></div></div>
+  <h1 class="gate-h">Tap to <em>Enter</em></h1>
+  <p class="gate-caps">Physical Access Only</p>
+  <p class="gate-body">This page is sealed to a <strong>physical collector card</strong>. Each tap generates a one-time AES-128 cryptographic token that cannot be copied, forwarded, or guessed.</p>
+  <div class="gate-lock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> No card · No access · No exceptions</div>
+</div>
+
+<!-- ══ INVALID ══ -->
+<div id="invalid-screen" class="hidden">
+  <div class="inv-pill">Verification Failed</div>
+  <h1 class="inv-h">Invalid <em>Tap</em></h1>
+  <p class="inv-body">This link has been used or wasn't generated by a <strong>genuine Llama Hunter artifact</strong>. The chip creates a new unique signature every tap.</p>
+  <p class="inv-note">Tap your physical card again to generate a fresh link</p>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-logo" href="#"><img data-img="logo" src="" alt="Llama Hunter · Lliving Artifacts"></a>
+  <ul class="nav-links">
+    <li><a href="#auth">Verify</a></li><li><a href="#bts">Behind Scenes</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#fncs-summit">Summit</a></li><li><a href="#tech">The Chip</a></li>
+  </ul>
+  <div class="nav-pill" id="nav-pill">● Verified</div>
+</nav>
+
+<!-- ══ ARTIFACT PAGE ══ -->
+<div id="artifact" class="hidden">
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-issue">FNCS MAJOR 1 SUMMIT · 2026 · DÜSSELDORF, GERMANY <span class="accent">LHPCO-FNCSM1S2026-Talent</span></div>
+      <h1 class="hero-title">Talent<em></em></h1>
+      <p class="hero-sub">Five of Five</p>
+      <div class="verified-bar"><div class="v-dot"></div><span class="v-label">Chip Authenticated</span><span class="v-uid" id="hero-uid">UID: —</span></div>
+      <p class="hero-desc">Talent</p>
+      <div class="tags"><span class="tag gold">FIRST EDITION</span><span class="tag">TAG 1</span><span class="tag">TAG 2</span><span class="tag">AES-128</span><span class="tag">NTAG 424 DNA</span></div>
+    </div>
+    <div class="hero-right">
+      <div class="card-3d" id="card3d" title="Click to flip">
+        <div class="card-inner" id="cardInner">
+          <div class="card-face card-front" style="background:#041210;">
+            <div class="card-serial">TALENT 5/5</div>
+            <div class="card-photo" style="position:absolute; inset:0;">
+              <img data-img="cardFront" src="" alt="Card Front" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;display:block;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="card-photo-empty"><span>🦙</span><span>card-front.jpg</span></div>
+            </div>
+          </div>
+          <div class="card-face card-back">
+            <img class="back-bg" data-img="cardBack" src="" alt="Card Back">
+            <div class="back-uid-stamp" id="back-uid">—</div>
+            <div class="back-tap-stamp">TAP #<span id="back-tap">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="edition-sep" style="max-width:480px;"><div class="es-line"></div><div class="es-text">Tap <span id="es-ctr">—</span> · 5/5</div><div class="es-line"></div></div>
+      <div class="card-hint">Click to flip · Hover to pause</div>
+    </div>
+  </section>
+
+  <div class="data-strip">
+    <div class="ds-item"><div class="ds-num">1<span>/1</span></div><div class="ds-label">Edition Size</div></div>
+    <div class="ds-item"><div class="ds-num" id="ds-taps">—</div><div class="ds-label">Total Taps</div></div>
+    <div class="ds-item"><div class="ds-num">128</div><div class="ds-label">AES Bit Key</div></div>
+    <div class="ds-item"><div class="ds-num">∞</div><div class="ds-label">Verifications</div></div>
+  </div>
+
+  <section class="auth-wrap" id="auth">
+    <div class="auth-left fade-up"><div class="s-eye">Cryptographically Proven</div><h2 class="s-title">Chip <em>Auth</em></h2><p class="auth-body">This card doesn't need a blockchain. The NXP NTAG 424 DNA chip performs <strong>hardware cryptographic signing</strong> on every tap. The signature changes every single time — making it physically impossible to copy or replay.</p></div>
+    <div class="auth-right fade-up">
+      <div class="rec-row"><span class="rk">Status</span><span class="rv ok">✓ Authentic</span></div>
+      <div class="rec-row"><span class="rk">Chip UID</span><span class="rv mono" id="auth-uid">—</span></div>
+      <div class="rec-row"><span class="rk">Tap Count</span><span class="rv gold" id="auth-tap">—</span></div>
+      <div class="rec-row"><span class="rk">Chip Model</span><span class="rv">NXP NTAG 424 DNA</span></div>
+      <div class="rec-row"><span class="rk">Algorithm</span><span class="rv mono">AES-128 · CMAC</span></div>
+      <div class="rec-row"><span class="rk">Replay Safe</span><span class="rv ok">Yes — Counter Verified</span></div>
+      <div class="rec-row"><span class="rk">Forgeable</span><span class="rv bad">Impossible</span></div>
+      <div class="cert-box"><div class="cert-title">Certified Original</div><p class="cert-body">This artifact has passed cryptographic hardware verification. The chip confirms it is the genuine physical object — not a screenshot, copy, or forwarded link.</p></div>
+    </div>
+  </section>
+
+  <section class="bts-wrap" id="bts">
+    <div class="bts-header fade-up"><div class="s-eye">Exclusive Holder Access</div><h2 class="s-title">Behind the <em>Scenes</em></h2><p class="bts-intro">Talent;</p></div>
+    <div class="nf-row-outer fade-up">
+      <div class="nf-edge left"><button class="nf-arrow" id="btsPrev" aria-label="Scroll left">&#8592;</button></div>
+      <div class="nf-edge right"><button class="nf-arrow" id="btsNext" aria-label="Scroll right">&#8594;</button></div>
+      <div class="nf-row" id="btsRow">
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="btsMain" src="" alt="Behind Scenes Main"></div><div class="nf-bar"><div class="nf-bar-title">Production Preview</div></div><div class="nf-overlay"><div class="nf-headline">Production Preview</div><div class="nf-credit">Card Fabrication</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="bts2" src="" alt="Behind Scenes 2"></div><div class="nf-bar"><div class="nf-bar-title">Design Phase</div></div><div class="nf-overlay"><div class="nf-headline">Design Phase</div><div class="nf-credit">Concept Art</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="bts3" src="" alt="Behind Scenes 3"></div><div class="nf-bar"><div class="nf-bar-title">Chip Programming</div></div><div class="nf-overlay"><div class="nf-headline">Chip Programming</div><div class="nf-credit">NTAG 424 DNA</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="bts4" src="" alt="Behind Scenes 4"></div><div class="nf-bar"><div class="nf-bar-title">Quality Check</div></div><div class="nf-overlay"><div class="nf-headline">Quality Check</div><div class="nf-credit">Verification</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="bts5" src="" alt="Behind Scenes 5"></div><div class="nf-bar"><div class="nf-bar-title">Packaging</div></div><div class="nf-overlay"><div class="nf-headline">Packaging</div><div class="nf-credit">Final Assembly</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="bts6" src="" alt="Behind Scenes 6"></div><div class="nf-bar"><div class="nf-bar-title">Event Prep</div></div><div class="nf-overlay"><div class="nf-headline">Event Prep</div><div class="nf-credit">Düsseldorf</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="found-wrap" id="card-found">
+    <div class="found-inner fade-up">
+      <div class="found-badge"><span class="found-badge-dot"></span><span class="found-badge-text">Day 2 · FNCS Major 1 Summit</span></div>
+      <div class="found-icon">🎉</div>
+      <h2 class="found-title">You Found an <em>Exclusive</em> Card</h2>
+      <p class="found-body">You've just discovered the <strong>only FNCS Major 1 Summit × Llama Hunter NFC Collector Card</strong> hidden on Day 2 of the competition. There is no other one. These cards don't come around twice.</p>
+      <div class="found-divider"></div>
+      <p class="found-cta-text">Snap a photo with the card, post it to <strong>X / Twitter</strong> or <strong>Instagram</strong>, tag <strong>@RealLlamaHunter</strong>, and drop your <strong>seat number</strong> in the caption for a chance at even more free loot — plus we want that selfie.</p>
+      <div class="found-tags"><span class="found-tag">#FNCSMajor1</span><span class="found-tag">#LlamaHunter</span><span class="found-tag">#LlivingArtifacts</span><span class="found-tag">@RealLlamaHunter</span></div>
+      <div class="found-seat-row"><span class="found-seat-label">Include your seat number in the post caption</span><span class="found-seat-icon">🪑</span></div>
+    </div>
+  </section>
+
+  <section class="tp-section" id="gallery">
+    <div class="tp-header fade-up"><div class="s-eye">Exclusive Holder Access</div><h2 class="s-title">Talent <em>Profiles</em></h2></div>
+    <div class="tp-grid fade-up">
+      <div class="tp-card" data-tp="0"><div class="tp-card-img"><img src="talent5-TP-1.png" alt="Frankie Ward" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Frankie Ward</div></div><div class="tp-card-body"><div class="tp-card-name">Frankie Ward</div><div class="tp-card-role">Host</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="1"><div class="tp-card-img"><img src="talent5-TP-2.png" alt="Zeke" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Zeke</div></div><div class="tp-card-body"><div class="tp-card-name">Zeke</div><div class="tp-card-role">Host</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="2"><div class="tp-card-img"><img src="talent5-TP-3.png" alt="Tocata" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Tocata</div></div><div class="tp-card-body"><div class="tp-card-name">Tocata</div><div class="tp-card-role">Analyst</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="3"><div class="tp-card-img"><img src="talent5-TP-4.png" alt="Miniminer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Miniminer</div></div><div class="tp-card-body"><div class="tp-card-name">Miniminer</div><div class="tp-card-role">Analyst</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="4"><div class="tp-card-img"><img src="talent5-TP-5.png" alt="Leven2k" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Leven2k</div></div><div class="tp-card-body"><div class="tp-card-name">Leven2k</div><div class="tp-card-role">Analyst</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="5"><div class="tp-card-img"><img src="talent5-TP-6.png" alt="Vivid" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Vivid</div></div><div class="tp-card-body"><div class="tp-card-name">Vivid</div><div class="tp-card-role">Analyst</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="6"><div class="tp-card-img"><img src="talent5-TP-7.png" alt="JacobPR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">JacobPR</div></div><div class="tp-card-body"><div class="tp-card-name">JacobPR</div><div class="tp-card-role">Caster</div><div class="tp-expand-hint">View Profile</div></div></div>
+      <div class="tp-card" data-tp="7"><div class="tp-card-img"><img src="talent5-TP-8.png" alt="Taco" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="tp-card-img-empty" style="display:none;">Taco</div></div><div class="tp-card-body"><div class="tp-card-name">Taco</div><div class="tp-card-role">Caster</div><div class="tp-expand-hint">View Profile</div></div></div>
+    </div>
+  </section>
+
+  <div class="tp-modal-bg" id="tpModalBg" role="dialog" aria-modal="true">
+    <div class="tp-modal" id="tpModal">
+      <button class="tp-modal-close" id="tpModalClose" aria-label="Close profile">✕</button>
+      <div class="tp-modal-img" id="tpModalImg"><img id="tpModalImgEl" src="" alt=""><div class="tp-modal-img-empty" id="tpModalImgEmpty" style="display:none;"></div></div>
+      <div class="tp-modal-content"><div class="tp-modal-eyebrow" id="tpModalEyebrow">Talent Profile</div><div class="tp-modal-name" id="tpModalName"></div><div class="tp-modal-role" id="tpModalRole"></div><div class="tp-modal-bio" id="tpModalBio"></div></div>
+    </div>
+  </div>
+
+  <section class="gallery-wrap" id="fncs-summit">
+    <div class="gallery-header fade-up"><div class="s-eye">Düsseldorf · 2026</div><h2 class="s-title">FNCS <em>Major 1 Summit</em></h2></div>
+    <div class="nf-row-outer fade-up">
+      <div class="nf-edge left"><button class="nf-arrow" id="summitPrev" aria-label="Scroll left">&#8592;</button></div>
+      <div class="nf-edge right"><button class="nf-arrow" id="summitNext" aria-label="Scroll right">&#8594;</button></div>
+      <div class="nf-row" id="summitRow">
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="fncsPlaceholder" src="" alt="FNCS Major 1 Summit"></div><div class="nf-bar"><div class="nf-bar-title">FNCS MAJOR 1 SUMMIT 2026</div></div><div class="nf-overlay"><div class="nf-headline">FNCS MAJOR 1 SUMMIT 2026</div><div class="nf-credit">Düsseldorf, Germany</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="fncsPlaceholder" src="" alt="FNCS Major 1 Summit"></div><div class="nf-bar"><div class="nf-bar-title">FNCS MAJOR 1 SUMMIT 2026</div></div><div class="nf-overlay"><div class="nf-headline">FNCS MAJOR 1 SUMMIT 2026</div><div class="nf-credit">Düsseldorf, Germany</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="fncsPlaceholder" src="" alt="FNCS Major 1 Summit"></div><div class="nf-bar"><div class="nf-bar-title">FNCS MAJOR 1 SUMMIT 2026</div></div><div class="nf-overlay"><div class="nf-headline">FNCS MAJOR 1 SUMMIT 2026</div><div class="nf-credit">Düsseldorf, Germany</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="fncsPlaceholder" src="" alt="FNCS Major 1 Summit"></div><div class="nf-bar"><div class="nf-bar-title">FNCS MAJOR 1 SUMMIT 2026</div></div><div class="nf-overlay"><div class="nf-headline">FNCS MAJOR 1 SUMMIT 2026</div><div class="nf-credit">Düsseldorf, Germany</div></div></div>
+        <div class="nf-card"><div class="nf-card-inner"><img data-img="fncsPlaceholder" src="" alt="FNCS Major 1 Summit"></div><div class="nf-bar"><div class="nf-bar-title">FNCS MAJOR 1 SUMMIT 2026</div></div><div class="nf-overlay"><div class="nf-headline">FNCS MAJOR 1 SUMMIT 2026</div><div class="nf-credit">Düsseldorf, Germany</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech-wrap" id="tech">
+    <div class="tech-left fade-up"><div class="s-eye">Why It Cannot Be Faked</div><h2 class="s-title">The <em>Chip</em></h2>
+      <div class="tech-feats">
+        <div class="tech-feat"><h4>Cryptographic Signing</h4><p>Every tap sends a unique <strong>CMAC signature</strong> generated from the chip's locked AES-128 key. The server rejects anything not freshly signed.</p></div>
+        <div class="tech-feat"><h4>Monotonic Counter</h4><p>The chip's counter increments every read and <strong>can never decrease</strong>. Replayed links are rejected instantly.</p></div>
+        <div class="tech-feat"><h4>Hardware-Locked Key</h4><p>The AES key lives in the chip's <strong>secure memory</strong> — it cannot be read out even with professional equipment. The card is the key.</p></div>
+        <div class="tech-feat"><h4>No App. No Login.</h4><p>Works on every NFC phone instantly. <strong>iPhone 7+</strong> and all modern Android — tap, verify, access.</p></div>
+      </div>
+    </div>
+    <div class="tech-right fade-up">
+      <div class="tech-glyph">NFC</div>
+      <div class="spec-item"><span class="sk">Chip</span><span class="sv">NXP NTAG 424 DNA</span></div>
+      <div class="spec-item"><span class="sk">Algorithm</span><span class="sv">AES-128 · CMAC</span></div>
+      <div class="spec-item"><span class="sk">Standard</span><span class="sv">ISO/IEC 14443-4</span></div>
+      <div class="spec-item"><span class="sk">Frequency</span><span class="sv">13.56 MHz</span></div>
+      <div class="spec-item"><span class="sk">Key Slot</span><span class="sv">SDM File Read Key 1</span></div>
+      <div class="spec-item"><span class="sk">UID Mirror</span><span class="sv">Enabled</span></div>
+      <div class="spec-item"><span class="sk">Counter</span><span class="sv">Enabled · Monotonic</span></div>
+      <div class="spec-item"><span class="sk">iOS</span><span class="sv">iPhone 7+ (all)</span></div>
+      <div class="spec-item"><span class="sk">Android</span><span class="sv">All NFC devices</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-col"><div class="f-logo"><img data-img="logo" src="" alt="Llama Hunter · Lliving Artifacts"></div><p class="f-copy">© 2026 Llama Hunter Studios<br>Niagara Falls, Canada<br>All rights reserved.</p><p class="f-copy" style="margin-top:10px;"><a href="https://www.LLAMAHUNTER.com" target="_blank" rel="noopener" style="font-weight:700;color:inherit;text-decoration:none;letter-spacing:.03em;">www.LLAMAHUNTER.com</a></p><p class="f-copy" style="margin-top:14px;opacity:.35;font-size:.66rem;">Not affiliated with Fortnite or Epic Games.</p></div>
+    <div class="f-col"><div class="f-eye">This Artifact</div><div class="f-stat">FNCS Major 1 Summit Edition</div><p class="f-note">FNCS Major 1 Summit · 2026 · Düsseldorf.<br>FNCS Major 1 Summit Edition</p><div class="f-uid" id="footer-uid"></div></div>
+    <div class="f-col"><div class="f-eye">About</div><p class="f-note">Llama Hunter Studios creates authenticated physical collector artifacts for creators and esports moments that deserve to exist in the real world — secured by hardware cryptography, not promises.</p></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const IMG = window.CARD_IMAGES || {};
+  document.querySelectorAll('[data-img]').forEach(el => { const key = el.getAttribute('data-img'); if (IMG[key]) el.src = IMG[key]; });
+
+  const p = new URLSearchParams(window.location.search);
+  const valid = p.get('valid');
+  const uid = p.get('uid');
+  const counter = p.get('counter');
+
+  const elGate = document.getElementById('gate');
+  const elInv  = document.getElementById('invalid-screen');
+  const elArt  = document.getElementById('artifact');
+  const elPill = document.getElementById('nav-pill');
+
+  if (valid === 'true' && uid && counter) {
+    const code = p.get('code');
+    if (!code) { window.location.href = '/index-teal.html'; return; }
+    fetch(`/api/redeem?code=${encodeURIComponent(code)}&uid=${encodeURIComponent(uid)}&counter=${encodeURIComponent(counter)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) { elGate.classList.add('hidden'); elArt.classList.remove('hidden'); populate(uid, counter); }
+        else { window.location.href = '/index-teal.html'; }
+      })
+      .catch(() => { window.location.href = '/index-teal.html'; });
+  } else {
+    elGate.classList.add('hidden'); elInv.classList.remove('hidden');
+    elPill.textContent = '● Rejected'; elPill.style.color = '#9b4040'; elPill.style.borderColor = 'rgba(155,64,64,.3)';
+  }
+
+  function populate(uid, ctr) {
+    const set = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+    set('hero-uid',uid); set('back-uid',uid); set('back-tap',ctr); set('es-ctr',ctr);
+    set('auth-uid',uid); set('auth-tap',ctr+' taps'); set('ds-taps',ctr);
+    const fu = document.getElementById('footer-uid'); if(fu) fu.textContent = 'UID: '+uid;
+  }
+
+  const c3d = document.getElementById('card3d'), ci = document.getElementById('cardInner');
+  let flipped = false, animTimer = null, busy = false;
+  if(c3d && ci) {
+    c3d.addEventListener('click', () => {
+      if(busy) return; busy = true; flipped = !flipped; clearTimeout(animTimer);
+      ci.style.animation = 'none'; ci.style.transition = 'transform 0.75s cubic-bezier(0.33,1.4,0.68,1)';
+      c3d.style.transition = 'transform 0.375s cubic-bezier(0.4,0,1,1)'; c3d.style.transform = 'scale(0.92)';
+      setTimeout(() => { c3d.style.transition = 'transform 0.375s cubic-bezier(0,0,0.6,1)'; c3d.style.transform = 'scale(1)'; }, 375);
+      setTimeout(() => { c3d.style.filter = 'drop-shadow(0 0 22px rgba(0,201,160,0.6))'; setTimeout(() => { c3d.style.filter = ''; }, 280); }, 340);
+      ci.classList.remove('sheen'); void ci.offsetWidth; ci.classList.add('sheen'); setTimeout(() => ci.classList.remove('sheen'), 850);
+      if(flipped){ c3d.classList.add('flipped'); ci.style.transform = 'rotateY(180deg)'; setTimeout(() => { busy = false; }, 780); }
+      else { c3d.classList.remove('flipped'); ci.style.transform = 'rotateY(0deg)';
+        animTimer = setTimeout(() => { if(!flipped){ ci.style.transition=''; ci.style.transform=''; ci.style.animation='card-tilt-y 9s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate,card-tilt-x 13s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate,card-lift 7s cubic-bezier(0.45,0.05,0.55,0.95) infinite alternate'; } busy = false; }, 800);
+      }
+    });
+  }
+
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { threshold:0.06 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  (function(){ const row = document.getElementById('btsRow'), btnPrev = document.getElementById('btsPrev'), btnNext = document.getElementById('btsNext'); if(!row) return; const SPEED = 0.5, STEP = 330; let paused = false; Array.from(row.children).forEach(card => { const clone = card.cloneNode(true); clone.setAttribute('aria-hidden','true'); row.appendChild(clone); }); function tick(){ if(!paused){ row.scrollLeft += SPEED; const half = (row.scrollWidth - row.clientWidth)/2; if(row.scrollLeft >= half) row.scrollLeft -= half; } requestAnimationFrame(tick); } requestAnimationFrame(tick); row.addEventListener('mouseenter', () => { paused = true; }); row.addEventListener('mouseleave', () => { paused = false; }); row.addEventListener('touchstart', () => { paused = true; }, { passive:true }); row.addEventListener('touchend', () => { setTimeout(() => { paused = false; }, 2200); }, { passive:true }); function smoothScrollBy(amount){ const start = row.scrollLeft, duration = 380, startTs = performance.now(); paused = true; function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; } function frame(ts){ const p = Math.min((ts-startTs)/duration,1); row.scrollLeft = start + amount*ease(p); if(p<1) requestAnimationFrame(frame); else setTimeout(() => { paused = false; }, 600); } requestAnimationFrame(frame); } if(btnPrev) btnPrev.addEventListener('click', () => smoothScrollBy(-STEP)); if(btnNext) btnNext.addEventListener('click', () => smoothScrollBy( STEP)); })();
+  (function(){ const row = document.getElementById('summitRow'), btnPrev = document.getElementById('summitPrev'), btnNext = document.getElementById('summitNext'); if(!row) return; const SPEED = 0.55, STEP = 330; let paused = false; Array.from(row.children).forEach(card => { const clone = card.cloneNode(true); clone.setAttribute('aria-hidden','true'); clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); row.appendChild(clone); }); function tick(){ if(!paused){ row.scrollLeft += SPEED; const half = (row.scrollWidth - row.clientWidth)/2; if(row.scrollLeft >= half) row.scrollLeft -= half; } requestAnimationFrame(tick); } requestAnimationFrame(tick); row.addEventListener('mouseenter', () => { paused = true; }); row.addEventListener('mouseleave', () => { paused = false; }); row.addEventListener('touchstart', () => { paused = true; }, { passive:true }); row.addEventListener('touchend', () => { setTimeout(() => { paused = false; }, 2200); }, { passive:true }); function smoothScrollBy(amount){ const start = row.scrollLeft, duration = 380, startTs = performance.now(); paused = true; function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; } function frame(ts){ const p = Math.min((ts-startTs)/duration,1); row.scrollLeft = start + amount*ease(p); if(p<1) requestAnimationFrame(frame); else setTimeout(() => { paused = false; }, 600); } requestAnimationFrame(frame); } if(btnPrev) btnPrev.addEventListener('click', () => smoothScrollBy(-STEP)); if(btnNext) btnNext.addEventListener('click', () => smoothScrollBy( STEP)); })();
+
+  const TALENTS = [
+    { img:'talent5-TP-1.png', name:'Frankie Ward', role:'Host', bio:'<p>Frankie Ward\'s Fortnite career is the result of years of persistence. Before becoming a fixture on FNCS broadcasts, she cut her teeth producing shows across Counter-Strike, Overwatch, PUBG, and League of Legends. She has hosted for DreamHack, ESL, FACEIT, and Twitch—proving herself on stage after stage.</p><p>When she stepped into Fortnite, she brought more than experience; she brought emotional storytelling. She introduces players before life-changing matches and interviews champions as their dreams become reality. Her story isn\'t just about standing under bright lights—it\'s about building a path where none existed until she found herself at the center of gaming\'s biggest stage.</p>' },
+    { img:'talent5-TP-2.png', name:'Zeke', role:'Host', bio:'<p>Zeke\'s story has been woven into competitive Fortnite almost since the beginning. Before massive FNCS arenas, world championships, and millions of viewers, he was already helping shape the scene, becoming one of the earliest and most recognizable voices in Fortnite esports. From casting early Skirmish events to standing on the desk during the legendary Fortnite World Cup, Zeke became more than just a host — he became a familiar face that guided fans through some of the game\'s biggest moments.</p><p>Year after year, as Fortnite evolved and new champions rose, he remained there, introducing players before career-defining matches, breaking down unforgettable moments, and helping tell the stories behind the competition. While players lifted trophies and crowds erupted around him, Zeke quietly became part of Fortnite\'s own history — a constant presence whose voice helped connect millions of fans to the moments they would never forget.</p>' },
+    { img:'talent5-TP-3.png', name:'Tocata', role:'Analyst', bio:'<p>Tocata\'s Fortnite journey is a story of evolution — from competitor to analyst, from fighting in matches to breaking them down for millions of viewers around the world. He first made his name as a talented Fortnite player, competing at a high level, playing for Counter Logic Gaming, and battling through events during the early years of competitive Fortnite.</p><p>As the scene grew, Tocata stepped into a new role, bringing the perspective of someone who had lived the pressure himself. He moved from competing on the battlefield to standing behind the analyst desk at FNCS broadcasts, Gamers8, and major international Fortnite events. What makes his journey stand out is that he experienced Fortnite from both sides — chasing victory as a player and then helping tell the stories of those chasing it after him, proving that sometimes the path changes, but the passion never does.</p>' },
+    { img:'talent5-TP-4.png', name:'Miniminer', role:'Analyst', bio:'<p>Miniminer\'s connection to Fortnite is less about a traditional esports career and more about the way he helped bridge gaming and mainstream entertainment. Already known as one of the Sidemen and a massive YouTube creator, Simon Minter stepped into Fortnite during its biggest cultural moment, appearing in celebrity Pro-Am events where internet personalities and professional players shared the same stage.</p><p>In those moments, he wasn\'t just playing a game — he was part of something that showed how far Fortnite had reached beyond competitive esports into global pop culture. Miniminer\'s role in Fortnite isn\'t defined by trophies or championships, but by the energy he brought to the scene — the reminder that Fortnite became more than a game; it became a shared stage where creators, pros, and fans all collided in unforgettable moments.</p>' },
+    { img:'talent5-TP-5.png', name:'Leven2k', role:'Analyst', bio:'<p>Leven2k never won a major tournament as a player. He\'ll tell you that himself. But the instincts he built in those early losses — chasing endgames, learning rotations, feeling the pressure — became the foundation of something else. When he stepped behind the analyst desk, first for smaller EU events and eventually for FNCS broadcasts, he brought something most casters couldn\'t: the muscle memory of someone who had been in the storm.</p><p>He doesn\'t just narrate chaos; he translates it. While others hype the clutch shot, Leven2k explains the three decisions that led to it. He worked the Olympic Esports Series, became Creative Lead at Karta\'s Fortnite Studio, and quietly became one of the most trusted voices in European Fortnite — not because he\'s the loudest, but because he helps millions of viewers actually understand what they\'re watching.</p>' },
+    { img:'talent5-TP-6.png', name:'Vivid', role:'Analyst', bio:'<p>Vivid\'s Fortnite story is one built on relentless consistency and quiet determination in one of the most competitive eras the game has ever seen. As a core player for Ghost Gaming, he rose through the North American scene by grinding qualifiers and proving himself against the best, eventually breaking through to the Fortnite World Cup era where only the strongest survived.</p><p>Alongside his duo partner Chap, Vivid became known for smart, disciplined gameplay — not flashy hype, but control, decision-making, and staying alive when everything was collapsing around him. Even as the scene evolved and new stars arrived, Vivid remained a symbol of what it meant to be consistent at the highest level — a player who didn\'t rely on moments of luck, but on years of understanding the game deeper than most ever would.</p>' },
+    { img:'talent5-TP-7.png', name:'JacobPR', role:'Caster', bio:'<p>Jacob PR\'s Fortnite story is rooted in the early competitive era, when the game was still unpredictable and every tournament felt like uncharted territory. As a competitor, coach, and manager, he represented the North American scene during Fortnite\'s rise — grinding through online qualifiers, guiding players behind the scenes, and learning how to survive in a game that was changing almost every season.</p><p>Over time, that deep understanding of competitive Fortnite led him to a new role behind the microphone. Now a caster for FNCS broadcasts and other major events, he brings the perspective of someone who has seen the game from every angle — player, coach, manager, and storyteller. His journey reflects the quieter truth of esports: not everyone becomes a champion, but many still shape the path the scene walks on — and some, like Jacob PR, find a second life telling the stories of those who do.</p>' },
+    { img:'talent5-TP-8.png', name:'Taco', role:'Caster', bio:'<p>Taco\'s Fortnite story sits in the era where the game was still raw, chaotic, and wide open. Breaking into broadcasting during those early seasons, she became part of a wave of talent who helped define what high-level Fortnite coverage looked like before everything was fully optimized. In those days, success wasn\'t just about mechanics — it was about adapting faster than everyone else, learning new systems every patch, and earning the trust of a scene that had no reason to welcome a newcomer.</p><p>Taco did the work: watching VODs for months, showing up tournament after tournament, and proving she belonged. Now a regular caster for FNCS broadcasts, she brings the perspective of someone who had to learn Fortnite from scratch — not as a former pro, but as a storyteller who earned her seat at the table.</p>' }
+  ];
+
+  const bg = document.getElementById('tpModalBg'), closeBtn = document.getElementById('tpModalClose'), imgEl = document.getElementById('tpModalImgEl'), imgEmpty = document.getElementById('tpModalImgEmpty'), nameEl = document.getElementById('tpModalName'), roleEl = document.getElementById('tpModalRole'), bioEl = document.getElementById('tpModalBio');
+  if(bg) {
+    function openModal(idx){ const t = TALENTS[idx]; if(!t) return; imgEl.src = t.img; imgEl.alt = t.name; imgEmpty.textContent = t.name; imgEl.style.display = 'block'; imgEmpty.style.display = 'none'; imgEl.onerror = function(){ this.style.display='none'; imgEmpty.style.display='flex'; }; nameEl.innerHTML = t.name; roleEl.textContent = t.role; bioEl.innerHTML = t.bio; document.getElementById('tpModal').scrollTop = 0; bg.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeModal(){ bg.classList.remove('active'); document.body.style.overflow = ''; }
+    document.querySelectorAll('.tp-card[data-tp]').forEach(function(card){ card.addEventListener('click', function(){ openModal(parseInt(this.getAttribute('data-tp'),10)); }); });
+    closeBtn.addEventListener('click', closeModal); bg.addEventListener('click', function(e){ if(e.target === bg) closeModal(); }); document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+  }
+
+})();
+</script>
+</body>
+</html>
